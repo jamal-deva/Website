@@ -62,7 +62,7 @@ const FloatingIcons: React.FC = () => {
         height: "100vh",
         pointerEvents: "none",
         zIndex: 0,
-        transform: `translate3d(0, ${scrollY * -0.5}px, 0)`,
+        transform: `translate3d(0, ${scrollY * -1.5}px, 0)`,
         willChange: "transform",
       }}
     >
