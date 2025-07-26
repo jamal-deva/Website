@@ -1,0 +1,167 @@
+.floating-icons {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 0;
+  overflow: hidden;
+  will-change: transform;
+  transform: translateZ(0);
+  }
+
+.floating-icon {
+  position: absolute;
+  opacity: 100;
+  animation: floatY ease-in-out infinite;
+  will-change: transform;
+  transform: translateZ(0);
+  backface-visibility: hidden;
+}
+
+.glow {
+  filter: drop-shadow(0 0 6px rgba(59, 130, 246, 0.3)) blur(1px);
+}
+
+/* Text glow effects */
+.text-glow {
+  text-shadow: 0 0 40px rgba(255, 255, 255, 0.8), 0 0 80px rgba(59, 130, 246, 0.5), 0 0 120px rgba(59, 130, 246, 0.3), 0 0 160px rgba(59, 130, 246, 0.2);
+}
+
+.text-glow-blue {
+  text-shadow: 0 0 40px rgba(59, 130, 246, 0.8), 0 0 80px rgba(59, 130, 246, 0.6), 0 0 120px rgba(59, 130, 246, 0.4), 0 0 160px rgba(59, 130, 246, 0.2);
+}
+
+.text-glow-purple {
+  text-shadow: 0 0 40px rgba(139, 92, 246, 0.8), 0 0 80px rgba(139, 92, 246, 0.6), 0 0 120px rgba(139, 92, 246, 0.4), 0 0 160px rgba(139, 92, 246, 0.2);
+}
+
+.text-glow-pink {
+  text-shadow: 0 0 40px rgba(236, 72, 153, 0.8), 0 0 80px rgba(236, 72, 153, 0.6), 0 0 120px rgba(236, 72, 153, 0.4), 0 0 160px rgba(236, 72, 153, 0.2);
+}
+
+.text-glow-white {
+  text-shadow: 0 0 40px rgba(255, 255, 255, 0.6), 0 0 80px rgba(255, 255, 255, 0.4), 0 0 120px rgba(255, 255, 255, 0.2), 0 0 160px rgba(255, 255, 255, 0.1);
+}
+
+.text-glow-gray {
+  text-shadow: 0 0 40px rgba(156, 163, 175, 0.6), 0 0 80px rgba(156, 163, 175, 0.4), 0 0 120px rgba(156, 163, 175, 0.2), 0 0 160px rgba(156, 163, 175, 0.1);
+}
+
+@keyframes floatY {
+  0%   { transform: translateY(0); }
+  50%  { transform: translateY(-15px); }
+  100% { transform: translateY(0); }
+}
+
+.floating-icon {
+  pointer-events: none;
+  user-select: none;
+}
+
+/* Mobile-specific optimizations */
+@media (max-width: 768px) {
+  .floating-icons {
+    transform: scale(0.8);
+  }
+  
+  .floating-icon {
+    animation-duration: 8s !important;
+  }
+}
+
+/* Slide up animation */
+.slide-up {
+  opacity: 0;
+  transform: translateY(50px);
+  transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+}
+
+.slide-up.animate {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Staggered animation delays for grid items */
+.slide-up:nth-child(1) { transition-delay: 0.1s; }
+.slide-up:nth-child(2) { transition-delay: 0.2s; }
+.slide-up:nth-child(3) { transition-delay: 0.3s; }
+.slide-up:nth-child(4) { transition-delay: 0.4s; }
+.slide-up:nth-child(5) { transition-delay: 0.5s; }
+.slide-up:nth-child(6) { transition-delay: 0.6s; }
+
+/* Slide horizontal animations */
+.slide-left {
+  opacity: 0;
+  transform: translateX(-50px);
+  transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+}
+
+.slide-left.animate {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+.slide-right {
+  opacity: 0;
+  transform: translateX(50px);
+  transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+}
+
+.slide-right.animate {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+/* Staggered animation delays for horizontal slides */
+.slide-left:nth-child(1), .slide-right:nth-child(1) { transition-delay: 0.1s; }
+.slide-left:nth-child(2), .slide-right:nth-child(2) { transition-delay: 0.2s; }
+.slide-left:nth-child(3), .slide-right:nth-child(3) { transition-delay: 0.3s; }
+.slide-left:nth-child(4), .slide-right:nth-child(4) { transition-delay: 0.4s; }
+.slide-left:nth-child(5), .slide-right:nth-child(5) { transition-delay: 0.5s; }
+.slide-left:nth-child(6), .slide-right:nth-child(6) { transition-delay: 0.6s; }
+.slide-left:nth-child(7), .slide-right:nth-child(7) { transition-delay: 0.7s; }
+.slide-left:nth-child(8), .slide-right:nth-child(8) { transition-delay: 0.8s; }
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Ensure smooth scrolling on mobile */
+html {
+  scroll-behavior: smooth;
+  -webkit-overflow-scrolling: touch;
+}
+
+/* Smooth scrolling for all elements */
+* {
+  scroll-behavior: smooth;
+}
+
+/* Performance optimizations */
+body {
+  transform: translateZ(0);
+  backface-visibility: hidden;
+  perspective: 1000px;
+}
+
+/* Optimize video elements */
+video {
+  transform: translateZ(0);
+  backface-visibility: hidden;
+}
+
+/* Optimize sections for smooth scrolling */
+section {
+  transform: translateZ(0);
+  backface-visibility: hidden;
+}
+
+/* Improve touch targets on mobile */
+@media (max-width: 768px) {
+  button {
+    min-height: 44px;
+    min-width: 44px;
+  }
+}
