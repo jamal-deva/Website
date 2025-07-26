@@ -71,6 +71,38 @@
   }
 }
 
+/* Button hover effects */
+button {
+  transition: all 0.3s ease;
+  transform: scale(1);
+}
+
+button:hover {
+  transform: scale(1.05);
+  filter: brightness(1.1);
+  box-shadow: 0 4px 15px rgba(59, 130, 246, 0.3);
+}
+
+/* Enhanced hover effects for specific button types */
+.glass-button:hover {
+  transform: scale(1.1);
+  background-color: rgba(255, 255, 255, 0.2);
+  backdrop-filter: blur(20px);
+  box-shadow: 0 8px 25px rgba(59, 130, 246, 0.4);
+}
+
+/* Navigation button hover effects */
+nav button:hover {
+  transform: scale(1.08);
+  box-shadow: 0 4px 20px rgba(59, 130, 246, 0.4);
+}
+
+/* Video control button hover effects */
+.video-control-button:hover {
+  transform: scale(1.15);
+  background-color: rgba(255, 255, 255, 0.4);
+  box-shadow: 0 4px 15px rgba(255, 255, 255, 0.3);
+}
 /* Slide up animation */
 .slide-up {
   opacity: 0;
