@@ -484,7 +484,7 @@ function App() {
         <div className="max-w-6xl mx-auto">
           <div className={`relative z-10 backdrop-blur-xl border border-white/10 rounded-3xl p-6 md:p-12 shadow-2xl bg-gradient-to-br from-[#1e3a8a]/20 via-[#1e40af]/15 to-[#3730a3]/20 slide-bounce ${isVisible ? 'animate' : ''}`}>
             <div className={`text-center mb-8 md:mb-12 fade-in delay-200 ${isVisible ? 'animate' : ''}`}>
-              <h2 className={`text-2xl sm:text-3xl md:text-4xl font-bold mb-4 md:mb-6 bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent px-4 text-glow-blue slide-up delay-300 ${isVisible ? 'animate' : ''}`}>
+              <h2 className={`text-2xl sm:text-3xl md:text-4xl font-bold mb-4 md:mb-6 bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent px-4 text-glow-blue slide-up delay-300 ${isVisible && !hasAnimated ? 'animate' : ''}`}>
                 Cinematic Projects
               </h2>
               <p className={`text-gray-300 text-center mb-0 max-w-2xl mx-auto px-4 text-glow-gray slide-up delay-400 ${isVisible ? 'animate' : ''}`}>
