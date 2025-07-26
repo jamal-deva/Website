@@ -127,7 +127,7 @@ const FloatingNavbar: React.FC = () => {
   };
 
   return (
-    <nav className="fixed top-3 left-1/2 transform -translate-x-1/2 z-50">
+    <nav className="fixed top-3 left-1/2 transform -translate-x-1/2 z-20">
      <div className="relative rounded-full px-3 md:px-9 py-2 shadow-lg text-white backdrop-blur-lg border border-white/10 hover:shadow-full transition-all duration-300 overflow-hidden">
 
   {/* Background gradient with opacity */}
