@@ -187,12 +187,44 @@ function App() {
   const [isVisible, setIsVisible] = useState(false);
   const socialMediaRef = useRef<HTMLDivElement>(null);
   const [isSocialMediaVisible, setIsSocialMediaVisible] = useState(false);
+  const heroRef = useRef<HTMLDivElement>(null);
+  const [isHeroVisible, setIsHeroVisible] = useState(false);
+  const contactRef = useRef<HTMLDivElement>(null);
+  const [isContactVisible, setIsContactVisible] = useState(false);
+  const [scrollY, setScrollY] = useState(0);
 
   useEffect(() => {
+    // Scroll position tracking for parallax effects
+    const handleScroll = () => {
+      setScrollY(window.scrollY);
+    };
+
+    window.addEventListener('scroll', handleScroll, { passive: true });
+
+    // Hero section observer
+    const heroObserver = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setIsHeroVisible(true);
+        }
+      },
+      {
+        threshold: 0.1,
+        rootMargin: '0px 0px -50px 0px'
+      }
+    );
+
+    if (heroRef.current) {
+      heroObserver.observe(heroRef.current);
+    }
+
+    // Cinematic section observer
     const observer = new IntersectionObserver(
       ([entry]) => {
         if (entry.isIntersecting) {
           setIsVisible(true);
+        } else {
+          setIsVisible(false);
         }
       },
       {
@@ -205,10 +237,13 @@ function App() {
       observer.observe(cinematicRef.current);
     }
 
+    // Social media section observer
     const socialMediaObserver = new IntersectionObserver(
       ([entry]) => {
         if (entry.isIntersecting) {
           setIsSocialMediaVisible(true);
+        } else {
+          setIsSocialMediaVisible(false);
         }
       },
       {
@@ -221,12 +256,38 @@ function App() {
       socialMediaObserver.observe(socialMediaRef.current);
     }
 
+    // Contact section observer
+    const contactObserver = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setIsContactVisible(true);
+        } else {
+          setIsContactVisible(false);
+        }
+      },
+      {
+        threshold: 0.1,
+        rootMargin: '0px 0px -100px 0px'
+      }
+    );
+
+    if (contactRef.current) {
+      contactObserver.observe(contactRef.current);
+    }
+
     return () => {
+      window.removeEventListener('scroll', handleScroll);
+      if (heroRef.current) {
+        heroObserver.unobserve(heroRef.current);
+      }
       if (cinematicRef.current) {
         observer.unobserve(cinematicRef.current);
       }
       if (socialMediaRef.current) {
         socialMediaObserver.unobserve(socialMediaRef.current);
+      }
+      if (contactRef.current) {
+        contactObserver.unobserve(contactRef.current);
       }
     };
   }, []);
@@ -312,9 +373,9 @@ function App() {
       <FloatingNavbar /> 
       
       {/* Hero Section */}
-   <section id="home" className="relative min-h-screen overflow-hidden bg-gradient-to-br from-[#0a0a0f] via-[#0f1419] to-[#1a1a2e] text-white">
+   <section id="home" className="relative min-h-screen overflow-hidden bg-gradient-to-br from-[#0a0a0f] via-[#0f1419] to-[#1a1a2e] text-white" ref={heroRef}>
          {/* Sophisticated Small Grid Background */}
-        <div className="absolute inset-0">
+        <div className="absolute inset-0 parallax-slow" style={{ transform: `translateY(${scrollY * 0.1}px)` }}>
           <svg className="absolute inset-0 w-full h-full" xmlns="http://www.w3.org/2000/svg">
             <defs>
               <pattern id="smallGrid" width="20" height="20" patternUnits="userSpaceOnUse">
@@ -333,21 +394,21 @@ function App() {
         </div>
       <FloatingIcons />
         {/* Deep Blue Blur Orbs */}
-        <div className="absolute top-1/4 left-[85%] w-80 h-80 bg-[#1e40af]/40 rounded-full blur-3xl"></div>
-        <div className="absolute bottom-1/4 right-[85%] w-96 h-96 bg-[#1e3a8a]/30 rounded-full blur-3xl"></div>
-        <div className="absolute top-1/3 left-1/4 w-72 h-72 bg-[#3730a3]/25 rounded-full blur-3xl"></div>
+        <div className="absolute top-1/4 left-[85%] w-80 h-80 bg-[#1e40af]/40 rounded-full blur-3xl parallax-fast" style={{ transform: `translateY(${scrollY * 0.2}px)` }}></div>
+        <div className="absolute bottom-1/4 right-[85%] w-96 h-96 bg-[#1e3a8a]/30 rounded-full blur-3xl parallax-fast" style={{ transform: `translateY(${scrollY * -0.15}px)` }}></div>
+        <div className="absolute top-1/3 left-1/4 w-72 h-72 bg-[#3730a3]/25 rounded-full blur-3xl parallax-fast" style={{ transform: `translateY(${scrollY * 0.1}px)` }}></div>
         
         <div className="container mx-auto px-8 py-20">
           <div className="relative z-10">
             {/* Hero Content */}
             <div className="text-center mb-8 md:mb-15">
-              <h1 className="text-4xl sm:text-6xl md:text-8xl font-bold mb-4 md:mb-6 bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent text-glow-purple">
+              <h1 className={`text-4xl sm:text-6xl md:text-8xl font-bold mb-4 md:mb-6 bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent text-glow-purple slide-down delay-200 ${isHeroVisible ? 'animate' : ''}`}>
                 Aamir Naqvi
               </h1>
-              <p className="text-lg sm:text-xl md:text-2xl text-gray-300 mb-6 md:mb-8 max-w-2xl mx-auto px-4 text-glow-gray">
+              <p className={`text-lg sm:text-xl md:text-2xl text-gray-300 mb-6 md:mb-8 max-w-2xl mx-auto px-4 text-glow-gray fade-in delay-400 ${isHeroVisible ? 'animate' : ''}`}>
                 Crafting compelling visual stories through the art of editing
               </p>
-              <div className="flex flex-col sm:flex-row justify-center space-y-3 sm:space-y-0 sm:space-x-4 mb-8 md:mb-16 px-4">
+              <div className={`flex flex-col sm:flex-row justify-center space-y-3 sm:space-y-0 sm:space-x-4 mb-8 md:mb-16 px-4 slide-up delay-600 ${isHeroVisible ? 'animate' : ''}`}>
                 <button 
                   onClick={(e) => {
                     e.preventDefault();
@@ -357,7 +418,7 @@ function App() {
                       inline: 'nearest'
                     });
                   }}
-                  className="px-6 sm:px-8 py-3 bg-blue-600 hover:bg-blue-700 rounded-lg font-medium transition-all duration-300 w-full sm:w-auto text-glow-white"
+                  className="px-6 sm:px-8 py-3 bg-blue-600 hover:bg-blue-700 rounded-lg font-medium transition-all duration-300 w-full sm:w-auto text-glow-white bounce-in delay-700"
                 >
                   View Work
                 </button>
@@ -370,7 +431,7 @@ function App() {
                       inline: 'nearest'
                     });
                   }}
-                  className="px-6 sm:px-8 py-3 border border-gray-400 hover:border-white rounded-lg font-medium transition-all duration-300 w-full sm:w-auto text-glow-white"
+                  className="px-6 sm:px-8 py-3 border border-gray-400 hover:border-white rounded-lg font-medium transition-all duration-300 w-full sm:w-auto text-glow-white bounce-in delay-800"
                 >
                   Contact Me
                 </button>
@@ -379,14 +440,16 @@ function App() {
             
             {/* Showreel */}
             <div className="max-w-6xl mx-auto">
-              <div className="relative z-10 backdrop-blur-xl border border-white/10 rounded-3xl p-6 md:p-12 shadow-2xl bg-gradient-to-br from-[#1e3a8a]/20 via-[#1e40af]/15 to-[#3730a3]/20">
-                <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-center mb-6 md:mb-8 text-white px-10 text-glow-purple">Showreel</h2>
-                <VideoPlayer
+              <div className={`relative z-10 backdrop-blur-xl border border-white/10 rounded-3xl p-6 md:p-12 shadow-2xl bg-gradient-to-br from-[#1e3a8a]/20 via-[#1e40af]/15 to-[#3730a3]/20 scale-in delay-900 ${isHeroVisible ? 'animate' : ''}`}>
+                <h2 className={`text-2xl sm:text-3xl md:text-4xl font-bold text-center mb-6 md:mb-8 text-white px-10 text-glow-purple slide-down delay-1000 ${isHeroVisible ? 'animate' : ''}`}>Showreel</h2>
+                <div className={`flip-in delay-1000 ${isHeroVisible ? 'animate' : ''}`}>
+                  <VideoPlayer
                   src="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4"
                   poster="https://images.pexels.com/photos/1112598/pexels-photo-1112598.jpeg?auto=compress&cs=tinysrgb&w=1200"
                   title="Showreel"
                   aspectRatio="16:9"
-                />
+                  />
+                </div>
               </div>
             </div>
           </div>
@@ -396,7 +459,7 @@ function App() {
       {/* 16:9 Portfolio Section */}
       <section id="videos" className="py-12 md:py-20 px-4 md:px-8 relative overflow-hidden bg-gradient-to-br from-[#0a0a0f] via-[#0f1419] to-[#1a1a2e]" ref={cinematicRef}> 
         {/* Small Grid Background */}
-        <div className="absolute inset-0">
+        <div className="absolute inset-0 parallax-slow" style={{ transform: `translateY(${scrollY * 0.05}px)` }}>
           <svg className="absolute inset-0 w-full h-full" xmlns="http://www.w3.org/2000/svg">
             <defs>
               <pattern id="portfolioGrid" width="20" height="20" patternUnits="userSpaceOnUse">
@@ -415,22 +478,22 @@ function App() {
         </div>
         
         {/* Deep Blue Blur Orbs */}
-        <div className="absolute top-1/4 left-[85%] w-64 h-64 bg-[#1e40af]/30 rounded-full blur-3xl"></div>
-        <div className="absolute bottom-1/4 right-[85%] w-64 h-64 bg-[#1e3a8a]/25 rounded-full blur-3xl"></div>
+        <div className="absolute top-1/4 left-[85%] w-64 h-64 bg-[#1e40af]/30 rounded-full blur-3xl parallax-fast" style={{ transform: `translateY(${scrollY * 0.1}px)` }}></div>
+        <div className="absolute bottom-1/4 right-[85%] w-64 h-64 bg-[#1e3a8a]/25 rounded-full blur-3xl parallax-fast" style={{ transform: `translateY(${scrollY * -0.08}px)` }}></div>
         
         <div className="max-w-6xl mx-auto">
-          <div className="relative z-10 backdrop-blur-xl border border-white/10 rounded-3xl p-6 md:p-12 shadow-2xl bg-gradient-to-br from-[#1e3a8a]/20 via-[#1e40af]/15 to-[#3730a3]/20">
-            <div className="text-center mb-8 md:mb-12">
-              <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold mb-4 md:mb-6 bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent px-4 text-glow-blue">
+          <div className={`relative z-10 backdrop-blur-xl border border-white/10 rounded-3xl p-6 md:p-12 shadow-2xl bg-gradient-to-br from-[#1e3a8a]/20 via-[#1e40af]/15 to-[#3730a3]/20 slide-bounce ${isVisible ? 'animate' : ''}`}>
+            <div className={`text-center mb-8 md:mb-12 fade-in delay-200 ${isVisible ? 'animate' : ''}`}>
+              <h2 className={`text-2xl sm:text-3xl md:text-4xl font-bold mb-4 md:mb-6 bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent px-4 text-glow-blue rotate-in delay-300 ${isVisible ? 'animate' : ''}`}>
                 Cinematic Projects
               </h2>
-              <p className="text-gray-300 text-center mb-0 max-w-2xl mx-auto px-4 text-glow-gray">
+              <p className={`text-gray-300 text-center mb-0 max-w-2xl mx-auto px-4 text-glow-gray slide-up delay-400 ${isVisible ? 'animate' : ''}`}>
                 Wide-format content including commercials, music videos, and documentaries
               </p>
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-8">
               {landscapeVideos.map((video, index) => (
-                <div key={index} className={`slide-up ${isVisible ? 'animate' : ''}`}>
+                <div key={index} className={`slide-up delay-${(index + 5) * 100} ${isVisible ? 'animate' : ''}`}>
                   <VideoPlayer
                     src={video.src}
                     poster={video.poster}
@@ -447,7 +510,7 @@ function App() {
       {/* 9:16 Portfolio Section */}
       <section className="py-12 md:py-20 px-4 md:px-8 relative overflow-hidden bg-gradient-to-br from-[#0a0a0f] via-[#0f1419] to-[#1a1a2e]" ref={socialMediaRef}>
         {/* Small Grid Background */}
-        <div className="absolute inset-0">
+        <div className="absolute inset-0 parallax-slow" style={{ transform: `translateY(${scrollY * 0.03}px)` }}>
           <svg className="absolute inset-0 w-full h-full" xmlns="http://www.w3.org/2000/svg">
             <defs>
               <pattern id="mobileGrid" width="20" height="20" patternUnits="userSpaceOnUse">
@@ -466,16 +529,16 @@ function App() {
         </div>
         
         {/* Deep Blue/Purple Blur Orbs */}
-        <div className="absolute top-1/3 right-[85%] w-64 h-64 bg-[#7c3aed]/25 rounded-full blur-3xl"></div>
-        <div className="absolute bottom-1/3 left-[85%] w-64 h-64 bg-[#1e40af]/30 rounded-full blur-3xl"></div>
+        <div className="absolute top-1/3 right-[85%] w-64 h-64 bg-[#7c3aed]/25 rounded-full blur-3xl parallax-fast" style={{ transform: `translateY(${scrollY * 0.12}px)` }}></div>
+        <div className="absolute bottom-1/3 left-[85%] w-64 h-64 bg-[#1e40af]/30 rounded-full blur-3xl parallax-fast" style={{ transform: `translateY(${scrollY * -0.1}px)` }}></div>
         
         <div className="max-w-6xl mx-auto">
-          <div className="relative z-10 backdrop-blur-xl border border-white/10 rounded-3xl p-6 md:p-12 shadow-2xl bg-gradient-to-br from-[#1e3a8a]/20 via-[#7c3aed]/15 to-[#3730a3]/20">
-            <div className="text-center mb-8 md:mb-12">
-              <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold mb-4 md:mb-6 bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent px-4 text-glow-purple">
+          <div className={`relative z-10 backdrop-blur-xl border border-white/10 rounded-3xl p-6 md:p-12 shadow-2xl bg-gradient-to-br from-[#1e3a8a]/20 via-[#7c3aed]/15 to-[#3730a3]/20 scale-in ${isSocialMediaVisible ? 'animate' : ''}`}>
+            <div className={`text-center mb-8 md:mb-12 fade-in delay-200 ${isSocialMediaVisible ? 'animate' : ''}`}>
+              <h2 className={`text-2xl sm:text-3xl md:text-4xl font-bold mb-4 md:mb-6 bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent px-4 text-glow-purple flip-in delay-300 ${isSocialMediaVisible ? 'animate' : ''}`}>
                 Social Media Content
               </h2>
-              <p className="text-gray-300 text-center mb-0 max-w-2xl mx-auto px-4 text-glow-gray">
+              <p className={`text-gray-300 text-center mb-0 max-w-2xl mx-auto px-4 text-glow-gray slide-down delay-400 ${isSocialMediaVisible ? 'animate' : ''}`}>
                 Vertical content optimized for mobile platforms and social media
               </p>
             </div>
@@ -485,7 +548,7 @@ function App() {
                   key={index} 
                   className={`${
                     index % 2 === 0 ? 'slide-left' : 'slide-right'
-                  } ${isSocialMediaVisible ? 'animate' : ''}`}
+                  } delay-${(index + 5) * 100} ${isSocialMediaVisible ? 'animate' : ''}`}
                 >
                   <VideoPlayer
                     src={video.src}
@@ -501,9 +564,9 @@ function App() {
       </section>
 
       {/* Contact Section */}
-      <section id="contact" className="py-12 md:py-20 px-4 md:px-8 bg-gradient-to-br from-[#0a0a0f] via-[#0f1419] to-[#1a1a2e] relative overflow-hidden">
+      <section id="contact" className="py-12 md:py-20 px-4 md:px-8 bg-gradient-to-br from-[#0a0a0f] via-[#0f1419] to-[#1a1a2e] relative overflow-hidden" ref={contactRef}>
         {/* Small Grid Background */}
-        <div className="absolute inset-0">
+        <div className="absolute inset-0 parallax-slow" style={{ transform: `translateY(${scrollY * 0.02}px)` }}>
           <svg className="absolute inset-0 w-full h-full" xmlns="http://www.w3.org/2000/svg">
             <defs>
               <pattern id="contactGrid" width="20" height="20" patternUnits="userSpaceOnUse">
@@ -522,16 +585,16 @@ function App() {
         </div>
         
         {/* Deep Blue Blur Orbs */}
-        <div className="absolute top-1/4 left-[80%] w-72 h-72 bg-[#1e40af]/30 rounded-full blur-3xl"></div>
-        <div className="absolute bottom-1/4 right-[80%] w-80 h-80 bg-[#1e3a8a]/25 rounded-full blur-3xl"></div>
+        <div className="absolute top-1/4 left-[80%] w-72 h-72 bg-[#1e40af]/30 rounded-full blur-3xl parallax-fast" style={{ transform: `translateY(${scrollY * 0.08}px)` }}></div>
+        <div className="absolute bottom-1/4 right-[80%] w-80 h-80 bg-[#1e3a8a]/25 rounded-full blur-3xl parallax-fast" style={{ transform: `translateY(${scrollY * -0.06}px)` }}></div>
         
         <div className="max-w-4xl mx-auto text-center">
-          <div className="relative z-10 backdrop-blur-xl border border-white/10 rounded-3xl p-8 md:p-12 shadow-2xl bg-gradient-to-br from-[#1e3a8a]/20 via-[#1e40af]/15 to-[#3730a3]/20">
-            <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold mb-6 md:mb-8 text-white px-4 text-glow-white">Let's Create Something Amazing</h2>
-            <p className="text-lg sm:text-xl text-gray-300 mb-6 md:mb-8 px-4 text-glow-gray">
+          <div className={`relative z-10 backdrop-blur-xl border border-white/10 rounded-3xl p-8 md:p-12 shadow-2xl bg-gradient-to-br from-[#1e3a8a]/20 via-[#1e40af]/15 to-[#3730a3]/20 bounce-in ${isContactVisible ? 'animate' : ''}`}>
+            <h2 className={`text-2xl sm:text-3xl md:text-4xl font-bold mb-6 md:mb-8 text-white px-4 text-glow-white slide-down delay-200 ${isContactVisible ? 'animate' : ''}`}>Let's Create Something Amazing</h2>
+            <p className={`text-lg sm:text-xl text-gray-300 mb-6 md:mb-8 px-4 text-glow-gray fade-in delay-400 ${isContactVisible ? 'animate' : ''}`}>
               Ready to bring your vision to life? Get in touch to discuss your next project.
             </p>
-            <button className="px-8 sm:px-12 py-3 md:py-4 bg-white text-gray-900 rounded-lg font-medium hover:bg-gray-100 transition-all duration-300 mx-4 text-glow">
+            <button className={`px-8 sm:px-12 py-3 md:py-4 bg-white text-gray-900 rounded-lg font-medium hover:bg-gray-100 transition-all duration-300 mx-4 text-glow scale-in delay-600 ${isContactVisible ? 'animate' : ''}`}>
               Start a Project
             </button>
           </div>
